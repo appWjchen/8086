@@ -1,0 +1,4 @@
+psp.com : psp.s
+	as86 -0 -o psp.o -l psp.lst psp.s
+	ld86 -0 -s -o psp.com psp.o
+

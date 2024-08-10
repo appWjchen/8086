@@ -1,0 +1,52 @@
+00000                                           
+00001                                           export _main
+00002 0000                                      .text
+00003                       00000000>           _main:
+00004 0000           EB           06                    jmp     _start
+00005                       00000002>           _data1:
+00006 0002                        52                    db      0x52
+00007                       00000003>           _outstr:
+00008 0003                        30                    .ascii  "0x"
+00009 0005                        00                    db      0, 0, 0x24
+00010                       00000008>           _start:
+00011 0008           8CC8                               mov     ax, cs
+00012 000A           05                   0010          add     ax, #0x10
+00013 000D           50                                 push    ax
+00014 000E           B8                   0013>         mov     ax, #_next
+00015 0011           50                                 push    ax
+00016 0012           CB                                 retf
+00017                       00000013>           _next:
+00018 0013           8CC8                               mov     ax, cs
+00019 0015           8ED8                               mov     ds, ax
+00020 0017           8EC0                               mov     es, ax
+00021 0019           8ED0                               mov     ss, ax
+00022 001B           89E0                               mov     ax, sp
+00023 001D           2D                   0100          sub     ax, #0x100
+00024 0020           89C4                               mov     sp, ax
+00025 0022           A0         0002>                   mov     al, _data1
+00026 0025           B4                     00          mov     ah, #0x00
+00027 0027           B7                     10          mov     bh, #16
+00028 0029           F6F7                               div     bh
+00029 002B           04                     30          add     al, #0x30
+00030 002D           80C4                   30          add     ah, #0x30
+00031 0030           BB                   0005>         mov     bx, #_outstr+2
+00032 0033           8807                               mov     [bx], al
+00033 0035           43                                 inc     bx
+00034 0036           8827                               mov     [bx], ah
+00035 0038           BA                   0003>         mov     dx, #_outstr
+00036 003B           B4                     09          mov     ah, #0x9
+00037 003D           CD                     21          int     0x21
+00038 003F           B8                   4C00          mov     ax, #0x4c00
+00039 0042           CD                     21          int     0x21
+00040 0000                                      .data
+00041 0000                                      .bss
+00042                                                   end
+
+
+Symbols:
+                    _data1  0 0002 R                        _main  0 0000 R E 
+                     _next  0 0013 R                      _outstr  0 0003 R   
+                    _start  0 0008 R   
+
+00000 errors
+00000 warnings

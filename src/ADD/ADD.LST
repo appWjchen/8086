@@ -1,0 +1,97 @@
+00001                                           export _main
+00002 0000                                      .text
+00003                       00000000>           _main:
+00004 0000           EB           26                    jmp _readA
+00005 0002                        50            _msg1:  .ascii "Please input A : "
+00006 0013                        50            _msg2:  .ascii "Please input B : "
+00007 0024                        41            _msg3:  .ascii "A+B="
+00008                       00000028>           _readA:
+00009 0028           B4                     03          mov     ah, #0x03
+00010 002A           BB                   0000          mov     bx, #0
+00011 002D           CD                     10          int     0x10
+00012 002F           B9                   0011          mov     cx, #_msg2 - _msg1
+00013 0032           B8                   0002>         mov     ax, #_msg1
+00014 0035           05                   0100          add     ax, #0x100
+00015 0038           89C5                               mov     bp, ax
+00016 003A           BB                   000F          mov     bx, #0x000f
+00017 003D           B8                   1301          mov     ax, #0x1301
+00018 0040           CD                     10          int     0x10
+00019 0042           B4                     10          mov     ah, #0x10
+00020 0044           CD                     16          int     0x16
+00021 0046           B9                   0001          mov     cx, #1
+00022 0049           B7                     00          mov     bh, #0
+00023 004B           B4                     05          mov     ah, #5
+00024 004D           80C4                   05          add     ah, #5
+00025 0050           CD                     10          int     0x10
+00026 0052           2C                     30          sub     al, #0x30
+00027 0054           A2         0400                    mov     0x400, al
+00028                       00000057>           _readB:
+00029 0057           B4                     03          mov     ah, #0x03
+00030 0059           BB                   0000          mov     bx, #0
+00031 005C           CD                     10          int     0x10
+00032 005E           FEC6                               inc     dh
+00033 0060           B2                     00          mov     dl, #0
+00034 0062           B9                   0011          mov     cx, #_msg3 - _msg2
+00035 0065           B8                   0013>         mov     ax, #_msg2
+00036 0068           05                   0100          add     ax, #0x100
+00037 006B           89C5                               mov     bp, ax
+00038 006D           BB                   000F          mov     bx, #0x000f
+00039 0070           B8                   1301          mov     ax, #0x1301
+00040 0073           CD                     10          int     0x10
+00041 0075           B4                     10          mov     ah, #0x10
+00042 0077           CD                     16          int     0x16
+00043 0079           B9                   0001          mov     cx, #1
+00044 007C           B7                     00          mov     bh, #0
+00045 007E           B4                     05          mov     ah, #5
+00046 0080           80C4                   05          add     ah, #5
+00047 0083           CD                     10          int     0x10
+00048 0085           2C                     30          sub     al, #0x30
+00049 0087           0206       0400                    add     al, 0x400
+00050 008B           A3         0400                    mov     0x400, ax
+00051 008E           B4                     03          mov     ah, #0x03
+00052 0090           BB                   0000          mov     bx, #0
+00053 0093           CD                     10          int     0x10
+00054 0095           FEC6                               inc     dh
+00055 0097           B2                     00          mov     dl, #0
+00056 0099           B9                   0004          mov     cx, #_readA - _msg3
+00057 009C           B8                   0024>         mov     ax, #_msg3
+00058 009F           05                   0100          add     ax, #0x100
+00059 00A2           89C5                               mov     bp, ax
+00060 00A4           BB                   000F          mov     bx, #0x000f
+00061 00A7           B8                   1301          mov     ax, #0x1301
+00062 00AA           CD                     10          int     0x10      
+00063 00AC           A1         0400                    mov     ax, 0x400
+00064 00AF           B4                     00          mov     ah, #0x00
+00065 00B1           B7                     0B          mov     bh, #11
+00066 00B3           FECF                               dec     bh
+00067 00B5           F6F7                               div     bh
+00068 00B7           04                     30          add     al, #0x30
+00069 00B9           80C4                   30          add     ah, #0x30
+00070 00BC           A2         0400                    mov     0x400, al
+00071 00BF           8826       0401                    mov     0x401, ah
+00072 00C3           B4                     03          mov     ah, #0x03
+00073 00C5           BB                   0000          mov     bx, #0
+00074 00C8           CD                     10          int     0x10
+00075 00CA           FEC6                               inc     dh
+00076 00CC           B2                     00          mov     dl, #0
+00077 00CE           B9                   0002          mov     cx, #2
+00078 00D1           B8                   0400          mov     ax, #0x400
+00079 00D4           89C5                               mov     bp, ax
+00080 00D6           BB                   000F          mov     bx, #0x000f
+00081 00D9           B8                   1301          mov     ax, #0x1301
+00082 00DC           CD                     10          int     0x10      
+00083                                           
+00084                       000000DE>           _end:
+00085 00DE           B8                   4C00          mov     ax, #0x4c00
+00086 00E1           CD                     21          int     0x21     
+00087 0000                                      .data
+00088 0000                                      .bss
+
+Symbols:
+                      _end  0 00DE R                        _main  0 0000 R E 
+                     _msg1  0 0002 R                        _msg2  0 0013 R   
+                     _msg3  0 0024 R                       _readA  0 0028 R   
+                    _readB  0 0057 R   
+
+00000 errors
+00000 warnings

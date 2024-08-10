@@ -1,0 +1,4 @@
+add.com : add.s
+	as86 -0 -o add.o -l add.lst add.s
+	ld86 -0 -s -o add.com add.o
+

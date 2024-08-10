@@ -1,0 +1,4 @@
+int21.com : int21.s
+	as86 -0 -o int21.o -l int21.lst int21.s
+	ld86 -0 -s -o int21.com int21.o
+

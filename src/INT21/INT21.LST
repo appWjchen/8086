@@ -1,0 +1,56 @@
+00001                                           export _main
+00002 0000                                      .text
+00003                       00000000>           _main:
+00004 0000           EB           75                    jmp start             
+00005                       00000002>           _msg1:
+00006 0002                        50                    .ascii  "Please input your name : $"
+00007                       0000001C>           _msg2:
+00008 001C                        57                    .ascii  "Welcome $"
+00009                       00000025>           _inbuffer:
+00010 0025                        50                    db      80
+00011                       00000026>           _incount:
+00012 0026                        00                    db      0
+00013                       00000027>           _indata:
+00014 0027                  00000050                    .space  80
+00015                       00000077>           start:
+00016 0077           BA                   0002>         mov     dx, #_msg1
+00017 007A           81C2                 0100          add     dx, #0x100
+00018 007E           B4                     09          mov     ah, #0x09       ; ah=0x09 output string
+00019 0080           CD                     21          int     0x21
+00020 0082           BA                   0025>         mov     dx, #_inbuffer
+00021 0085           81C2                 0100          add     dx, #0x100
+00022 0089           B4                     05          mov     ah, #0x05
+00023 008B           80C4                   05          add     ah, #0x05       ; ah=0x0a input string
+00024 008E           CD                     21          int     0x21
+00025 0090           B0                     05          mov     al, #0x05       
+00026 0092           04                     05          add     al, #0x05       ; al=0x0a newline
+00027 0094           88C2                               mov     dl, al
+00028 0096           B4                     02          mov     ah, #0x02       ; ah=0x02 output character
+00029 0098           CD                     21          int     0x21
+00030 009A           BA                   001C>         mov     dx, #_msg2
+00031 009D           81C2                 0100          add     dx, #0x100
+00032 00A1           B4                     09          mov     ah, #0x09       ; ah=0x09 output string
+00033 00A3           CD                     21          int     0x21
+00034 00A5           BB                   0027>         mov     bx, #_indata    
+00035 00A8           81C3                 0100          add     bx, #0x100      ; bx=_indata address
+00036 00AC           A0         0126>                   mov     al, [_incount+0x100]    ; al=_incount 
+00037 00AF           B4                     00          mov     ah, #0x0
+00038 00B1           01C3                               add     bx, ax          ; bx=end of input string
+00039 00B3           C707                 0024          mov     [bx], #0x24     ; ascii 0x24 is '$'
+00040 00B7           BA                   0027>         mov     dx, #_indata
+00041 00BA           81C2                 0100          add     dx, #0x100      ; dx=_indata address
+00042 00BE           B4                     09          mov     ah, #0x09       ; ah=0x09 output string
+00043 00C0           CD                     21          int     0x21
+00044 00C2           B8                   4C00          mov     ax, #0x4c00
+00045 00C5           CD                     21          int     0x21
+00046 0000                                      .data
+00047 0000                                      .bss
+
+Symbols:
+                 _inbuffer  0 0025 R                     _incount  0 0026 R   
+                   _indata  0 0027 R                        _main  0 0000 R E 
+                     _msg1  0 0002 R                        _msg2  0 001C R   
+                     start  0 0077 R   
+
+00000 errors
+00000 warnings
