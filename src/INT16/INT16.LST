@@ -1,0 +1,36 @@
+00001                                           export _main
+00002 0000                                      .text
+00003                       00000000>           _main:
+00004 0000           EB           15                    jmp start             ; 跳到 start 處去執行
+00005 0002                        50            msg:    .ascii "Please press a key : "
+00006                       00000017>           start:
+00007 0017           B4                     03          mov     ah, #0x03     ; ah = 0x03
+00008 0019           BB                   0000          mov     bx, #0
+00009 001C           CD                     10          int     0x10          ; int 0x10 取得游標位置
+00010 001E           B9                   0015          mov     cx, #21       ; 印出字串長度
+00011 0021           B8                   0002>         mov     ax, #msg      ; 印出字串的位址
+00012 0024           05                   0100          add     ax, #0x100    ; 加上 PSP 的長度
+00013 0027           89C5                               mov     bp, ax        ; 真正 msg 位址放到 bp 中
+00014 0029           B7                     00          mov     bh, #0x00     ; 頁碼
+00015 002B           B3                     0F          mov     bl, #0x0f     ; 顏色
+00016 002D           B4                     13          mov     ah, #0x13     ; ah = 0x13
+00017 002F           B0                     01          mov     al, #0x01     ; 模式
+00018 0031           CD                     10          int     0x10          ; int 0x10 輸出字串
+00019 0033           B4                     10          mov     ah, #0x10     ; ah = 0x10 
+00020 0035           CD                     16          int     0x16          ; int 0x16 讀取按鍵
+00021 0037           B9                   0003          mov     cx, #3        ; 重覆 3 次
+00022 003A           B7                     00          mov     bh, #0        ; 頁碼
+00023 003C           B4                     05          mov     ah, #5        ; ah = 0x05
+00024 003E           80C4                   05          add     ah, #5        ; ah = 0x0a, al = 字元
+00025 0041           CD                     10          int     0x10          ; int 0x10 輸出一個字元
+00026 0043           B8                   4C00          mov     ax, #0x4c00
+00027 0046           CD                     21          int     0x21
+00028 0000                                      .data
+00029 0000                                      .bss
+
+Symbols:
+                     _main  0 0000 R E                        msg  0 0002 R   
+                     start  0 0017 R   
+
+00000 errors
+00000 warnings

@@ -1,0 +1,27 @@
+CC              =gcc
+CFLAGS          =-DBSD_A_OUT -I../aout.h
+LDFLAGS		=-s
+BINDIR		=/usr/bin
+
+OBJS		=dumps.o io.o ld.o readobj.o table.o typeconv.o \
+		writebin.o
+
+all: ld86
+
+ld86: $(OBJS)
+	$(CC) $(LDFLAGS) $(OBJS) -o ld86
+#	chmem =232000 ld
+
+install: all
+	install -g bin -m 755 -o root ld86 $(BINDIR)
+
+clean:
+	$(RM) $(OBJS) ld86 core
+
+dumps.o: dumps.c const.h config.h obj.h type.h globvar.h
+io.o: io.c const.h config.h type.h globvar.h
+ld.o: ld.c const.h config.h type.h byteord.h globvar.h
+readobj.o: readobj.c const.h config.h byteord.h obj.h type.h globvar.h
+table.o: table.c const.h config.h align.h obj.h type.h globvar.h
+typeconv.o: typeconv.c const.h config.h type.h globvar.h
+writebin.o: writebin.c const.h config.h obj.h type.h globvar.h

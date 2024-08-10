@@ -1,0 +1,17 @@
+00001                                           export _main
+00002 0000                                      .text
+00003                       00000000>           _main:
+00004 0000           B8                   000A          mov     ax, #10
+00005 0003           BB                   000A          mov     bx, #0xa
+00006 0006           B9                   0011          mov     cx, #021
+00007 0009           BA                   FFFF          mov     dx, #-1
+00008 000C           B4                     4C          mov     ah, #0x4c
+00009 000E           CD                     21          int     0x21     
+00010 0000                                      .data
+00011 0000                                      .bss
+
+Symbols:
+                     _main  0 0000 R E 
+
+00000 errors
+00000 warnings
