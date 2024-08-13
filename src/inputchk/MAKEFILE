@@ -1,0 +1,4 @@
+inputchk.com : inputchk.s
+	as86 -0 -o inputchk.o -l inputchk.lst inputchk.s
+	ld86 -0 -s -o inputchk.com inputchk.o
+

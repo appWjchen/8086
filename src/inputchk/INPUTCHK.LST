@@ -1,0 +1,61 @@
+00001                                           export _main
+00002 0000                                      .text
+00003                       00000000>           _main:
+00004 0000           EB           24                    jmp _readA
+00005 0002                        50            _msg1:  .ascii "Please input A : "
+00006 0013                        69            _msg2:  .ascii "input error"
+00007 001E                        69            _msg3:  .ascii "input ok"
+00008                       00000026>           _readA:
+00009 0026           B4                     03          mov     ah, #0x03
+00010 0028           BB                   0000          mov     bx, #0
+00011 002B           CD                     10          int     0x10
+00012 002D           B9                   0011          mov     cx, #_msg2 - _msg1
+00013 0030           B8                   0002>         mov     ax, #_msg1
+00014 0033           05                   0100          add     ax, #0x100
+00015 0036           89C5                               mov     bp, ax
+00016 0038           BB                   000F          mov     bx, #0x000f
+00017 003B           B8                   1301          mov     ax, #0x1301
+00018 003E           CD                     10          int     0x10
+00019 0040           B4                     10          mov     ah, #0x10
+00020 0042           CD                     16          int     0x16
+00021 0044           B9                   0001          mov     cx, #1
+00022 0047           B7                     00          mov     bh, #0
+00023 0049           B4                     05          mov     ah, #5
+00024 004B           80C4                   05          add     ah, #5      ; user press a key
+00025 004E           CD                     10          int     0x10
+00026 0050           B4                     03          mov     ah, #0x03
+00027 0052           BB                   0000          mov     bx, #0
+00028 0055           CD                     10          int     0x10
+00029 0057           FEC6                               inc     dh
+00030 0059           B2                     00          mov     dl, #0
+00031 005B           88C4                               mov     ah, al      ; save the key in ah
+00032 005D           2C                     30          sub     al, #0x30   ; input ascii - 0x30
+00033 005F           72           0E                    jc      _error      ; set carry -> input < 0x30
+00034 0061           B0                     39          mov     al, #0x39
+00035 0063           28E0                               sub     al, ah      ; set carry -> input > 0x39
+00036 0065           72           08                    jc      _error
+00037 0067           B9                   0008          mov     cx, #_readA - _msg3
+00038 006A           B8                   001E>         mov     ax, #_msg3  ; input ok
+00039 006D           EB           06                    jmp     _endp
+00040                       0000006F>           _error:
+00041 006F           B9                   000B          mov     cx, #_msg3 - _msg2
+00042 0072           B8                   0013>         mov     ax, #_msg2  ; input error
+00043                       00000075>           _endp:
+00044 0075           05                   0100          add     ax, #0x100
+00045 0078           89C5                               mov     bp, ax
+00046 007A           BB                   000F          mov     bx, #0x000f
+00047 007D           B8                   1301          mov     ax, #0x1301
+00048 0080           CD                     10          int     0x10
+00049 0082           B8                   4C00          mov     ax, #0x4c00
+00050 0085           CD                     21          int     0x21     
+00051 0000                                      .data
+00052 0000                                      .bss
+
+Symbols:
+                     _endp  0 0075 R                       _error  0 006F R   
+                     _main  0 0000 R E                      _msg1  0 0002 R   
+                     _msg2  0 0013 R                        _msg3  0 001E R   
+                    _readA  0 0026 R   
+
+00000 errors
+00000 warnings
