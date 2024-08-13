@@ -2,4 +2,4 @@
 
 [8086 組合語言](https://github.com/appWjchen/as86/blob/main/8086%20%E7%B5%84%E5%90%88%E8%AA%9E%E8%A8%80.md)
 
-[flex 字詞分析程式產生器](https://github.com/appWjchen/8086/blob/main/flex%20%E5%AD%97%E8%A9%9E%E5%88%86%E6%9E%90%E5%99%A8.md)
+[flex 字詞分析程式產生器](https://github.com/appWjchen/8086/blob/main/flex%20%E5%AD%97%E8%A9%9E%E5%88%86%E6%9E%90%E7%A8%8B%E5%BC%8F%E7%94%A2%E7%94%9F%E5%99%A8.md)
