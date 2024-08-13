@@ -1,4 +1,4 @@
-# flex 字詞分析器
+# flex 字詞分析程式產生器
 
 陳維志(weijyh.chen@gmail.com)
 
