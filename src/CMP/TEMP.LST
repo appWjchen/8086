@@ -1,0 +1,65 @@
+00001                                           export _main
+00002 0000                                      .text
+00003                       00000000>           _main:
+00004 0000           EB           0C                    jmp _start
+00005 0002                        31            _msg1:  .ascii "1+2+..+10 = "
+00006                       0000000C            _msg1len:   equ     _start - _msg1
+00007                       0000000E>           _start:
+00008 000E           BB                   0001          mov     bx, #1
+00009 0011           B8                   0000          mov     ax, #0
+00010                       00000014>           _next:
+00011 0014           01D8                               add     ax, bx
+00012 0016           43                                 inc     bx
+00013 0017           83FB                   0B          cmp     bx, #11
+00014 001A           72           F8                    jb      _next
+00015 001C           A3         0400                    mov     0x400, ax
+00016                       0000001F>           _outmsg1:
+00017 001F           B4                     03          mov     ah, #0x03
+00018 0021           BB                   0000          mov     bx, #0
+00019 0024           CD                     10          int     0x10
+00020 0026           FEC6                               inc     dh
+00021 0028           B0                     00          mov     al, #0
+00022 002A           B9                   000C          mov     cx, #_msg1len
+00023 002D           B8                   0002>         mov     ax, #_msg1  
+00024 0030           05                   0100          add     ax, #0x100
+00025 0033           89C5                               mov     bp, ax
+00026 0035           BB                   000F          mov     bx, #0x000f
+00027 0038           B8                   1301          mov     ax, #0x1301
+00028 003B           CD                     10          int     0x10
+00029                       0000003D>           _outans:
+00030 003D           B4                     03          mov     ah, #0x03
+00031 003F           BB                   0000          mov     bx, #0
+00032 0042           CD                     10          int     0x10
+00033 0044           FEC2                               inc     dl
+00034 0046           A1         0400                    mov     ax, 0x400
+00035 0049           B7                     0B          mov     bh, #11
+00036 004B           FECF                               dec     bh
+00037 004D           F6F7                               div     bh
+00038 004F           04                     30          add     al, #0x30
+00039 0051           80C4                   30          add     ah, #0x30
+00040 0054           A2         0400                    mov     0x400, al
+00041 0057           8826       0401                    mov     0x401, ah
+00042 005B           B4                     03          mov     ah, #0x03
+00043 005D           BB                   0000          mov     bx, #0
+00044 0060           CD                     10          int     0x10
+00045 0062           B9                   0002          mov     cx, #2
+00046 0065           B8                   0400          mov     ax, #0x400
+00047 0068           89C5                               mov     bp, ax
+00048 006A           BB                   000F          mov     bx, #0x000f
+00049 006D           B8                   1301          mov     ax, #0x1301
+00050 0070           CD                     10          int     0x10      
+00051                                           
+00052                       00000072>           _endp:
+00053 0072           B8                   4C00          mov     ax, #0x4c00
+00054 0075           CD                     21          int     0x21     
+00055 0000                                      .data
+00056 0000                                      .bss
+
+Symbols:
+                     _endp  0 0072 R                        _main  0 0000 R E 
+                     _msg1  0 0002 R                     _msg1len  0 000C A   
+                     _next  0 0014 R                      _outans  0 003D R   
+                  _outmsg1  0 001F R                       _start  0 000E R   
+
+00000 errors
+00000 warnings

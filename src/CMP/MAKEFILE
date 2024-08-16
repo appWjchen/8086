@@ -1,0 +1,9 @@
+all: cmp.com
+
+%.o : %.s
+	as86 -0 -o $@ -l temp.lst $<
+
+cmp.com : cmp.o
+	ld86 -0 -s -o $@ $^
+
+
