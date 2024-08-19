@@ -1,0 +1,9 @@
+all: guess.com
+
+%.o : %.s
+	as86 -0 -o $@ -l temp.lst $<
+
+guess.com : guess.o
+	ld86 -0 -s -o $@ $^
+
+

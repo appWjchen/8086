@@ -1,0 +1,95 @@
+00001                                           export _main
+00002 0000                                      .text
+00003                       00000000>           _main:
+00004 0000           EB           2C                    jmp _start
+00005 0002                        49            _msg1:  .ascii "Input guess (0 ~ 9) : "
+00006 0018                        69            _msg2:  .ascii "input error"
+00007 0023                        66            _msg3:  .ascii "fail"
+00008 0027                        73            _msg4:  .ascii "success"
+00009                                           
+00010                       00000016            _msg1len:   equ     _msg2 - _msg1
+00011                       0000000B            _msg2len:   equ     _msg3 - _msg2
+00012                       00000004            _msg3len:   equ     _msg4 - _msg3
+00013                       00000007            _msg4len:   equ     _start - _msg4
+00014                                           
+00015                       0000002E>           _start:
+00016 002E           B4                     2C          mov     ah, #0x2c       ; get time
+00017 0030           CD                     21          int     0x21
+00018 0032           88D0                               mov     al, dl          ; dl almost random 0~99
+00019 0034           B4                     00          mov     ah, #0
+00020 0036           B3                     0B          mov     bl, #11
+00021 0038           FECB                               dec     bl
+00022 003A           F6F3                               div     bl              ; random / 10 , al 0 ~ 9
+00023 003C           A2         0500                    mov     0x500, al       ; save al in 0x500 
+00024                       0000003F>           _readA:
+00025 003F           E8         0053                    call    _getcursor
+00026 0042           B9                   0016          mov     cx, #_msg1len
+00027 0045           B8                   0002>         mov     ax, #_msg1
+00028 0048           E8         0052                    call    _printmsg
+00029 004B           B4                     10          mov     ah, #0x10
+00030 004D           CD                     16          int     0x16
+00031 004F           B9                   0001          mov     cx, #1
+00032 0052           B7                     00          mov     bh, #0
+00033 0054           B4                     05          mov     ah, #5
+00034 0056           80C4                   05          add     ah, #5      ; user press a key
+00035 0059           CD                     10          int     0x10        ; al = key pressed
+00036 005B           E8         0037                    call    _getcursor
+00037 005E           FEC6                               inc     dh
+00038 0060           B2                     00          mov     dl, #0
+00039 0062           88C4                               mov     ah, al      ; save the key in ah
+00040 0064           B0                     39          mov     al, #0x39   
+00041 0066           28E0                               sub     al, ah      ; 0x39 - input ascii
+00042 0068           72           1C                    jc      _error      ; set carry -> input > 0x39
+00043 006A           88E0                               mov     al, ah      ; restore saved al
+00044 006C           2C                     30          sub     al, #0x30   ; input ascii - 0x30
+00045 006E           72           16                    jc      _error      ; set carry -> input < 0x30
+00046                       00000070>           inputOK:                    ; input ok
+00047 0070           2A06       0500                    subb    al, 0x500   ; input - random
+00048 0074           75           08                    jnz     _guessfail
+00049 0076           B9                   0007          mov     cx, #_msg4len
+00050 0079           B8                   0027>         mov     ax, #_msg4  ; guess success message
+00051 007C           EB           0E                    jmp     _outmsg
+00052                       0000007E>           _guessfail:
+00053 007E           B9                   0004          mov     cx, #_msg3len
+00054 0081           B8                   0023>         mov     ax, #_msg3  ; guess fail message
+00055 0084           EB           06                    jmp     _outmsg
+00056                       00000086>           _error:
+00057 0086           B9                   000B          mov     cx, #_msg2len
+00058 0089           B8                   0018>         mov     ax, #_msg2  ; input error
+00059                       0000008C>           _outmsg:
+00060 008C           E8         000E                    call    _printmsg
+00061 008F           90                                 nop
+00062                       00000090>           _endp:
+00063 0090           B8                   4C00          mov     ax, #0x4c00
+00064 0093           CD                     21          int     0x21     
+00065                                           
+00066                       00000095>           _getcursor:
+00067 0095           B4                     03          mov     ah, #0x03
+00068 0097           BB                   0000          mov     bx, #0
+00069 009A           CD                     10          int     0x10
+00070 009C           C3                                 ret
+00071                                           
+00072                       0000009D>           _printmsg:
+00073 009D           05                   0100          add     ax, #0x100
+00074 00A0           89C5                               mov     bp, ax
+00075 00A2           BB                   000F          mov     bx, #0x000f
+00076 00A5           B8                   1301          mov     ax, #0x1301
+00077 00A8           CD                     10          int     0x10
+00078 00AA           C3                                 ret
+00079                                           
+00080 0000                                      .data
+00081 0000                                      .bss
+
+Symbols:
+                     _endp  0 0090 R                       _error  0 0086 R   
+                _getcursor  0 0095 R                   _guessfail  0 007E R   
+                     _main  0 0000 R E                      _msg1  0 0002 R   
+                  _msg1len  0 0016 A                        _msg2  0 0018 R   
+                  _msg2len  0 000B A                        _msg3  0 0023 R   
+                  _msg3len  0 0004 A                        _msg4  0 0027 R   
+                  _msg4len  0 0007 A                      _outmsg  0 008C R   
+                 _printmsg  0 009D R                       _readA  0 003F R   
+                    _start  0 002E R                      inputOK  0 0070 R   
+
+00000 errors
+00000 warnings
