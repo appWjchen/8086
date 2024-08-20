@@ -1,0 +1,113 @@
+00001                                           export _main
+00002 0000                                      .text
+00003                       00000000>           _main:
+00004 0000           EB           2C                    jmp _start
+00005 0002                        49            _msg1:  .ascii "Input guess (0 ~ 9) : "
+00006 0018                        69            _msg2:  .ascii "input error"
+00007 0023                        66            _msg3:  .ascii "fail"
+00008 0027                        73            _msg4:  .ascii "success"
+00009                                           
+00010                       00000016            _msg1len:   equ     _msg2 - _msg1
+00011                       0000000B            _msg2len:   equ     _msg3 - _msg2
+00012                       00000004            _msg3len:   equ     _msg4 - _msg3
+00013                       00000007            _msg4len:   equ     _start - _msg4
+00014                                           
+00015                       0000002E>           _start:
+00016 002E           E8         0067                    call    _getrandomnumber
+00017 0031           50                                 push    ax          ; save random number(AL) in stack
+00018                       00000032>           _readA:
+00019 0032           E8         0048                    call    _getcursorposition
+00020 0035           B9                   0016          mov     cx, #_msg1len
+00021 0038           B8                   0002>         mov     ax, #_msg1
+00022 003B           E8         0047                    call    _printmsg
+00023 003E           E8         0065                    call    _getkey
+00024 0041           E8         0067                    call    _outkey
+00025 0044           E8         0036                    call    _getcursorposition
+00026 0047           FEC6                               inc     dh
+00027 0049           B2                     00          mov     dl, #0
+00028 004B           88C4                               mov     ah, al      ; save the key in ah
+00029 004D           B0                     39          mov     al, #0x39   
+00030 004F           28E0                               sub     al, ah      ; 0x39 - input ascii
+00031 0051           72           1B                    jc      _error      ; set carry -> input > 0x39
+00032 0053           88E0                               mov     al, ah      ; restore saved al
+00033 0055           2C                     30          sub     al, #0x30   ; input ascii - 0x30
+00034 0057           72           15                    jc      _error      ; set carry -> input < 0x30
+00035                       00000059>           inputOK:                    ; input ok
+00036 0059           5B                                 pop     bx          ; restore random number(BL) from stack
+00037 005A           28D8                               sub     al, bl      ; input - random
+00038 005C           75           08                    jnz     _guessfail
+00039 005E           B9                   0007          mov     cx, #_msg4len
+00040 0061           B8                   0027>         mov     ax, #_msg4  ; guess success message
+00041 0064           EB           0E                    jmp     _outmsg
+00042                       00000066>           _guessfail:
+00043 0066           B9                   0004          mov     cx, #_msg3len
+00044 0069           B8                   0023>         mov     ax, #_msg3  ; guess fail message
+00045 006C           EB           06                    jmp     _outmsg
+00046                       0000006E>           _error:
+00047 006E           B9                   000B          mov     cx, #_msg2len
+00048 0071           B8                   0018>         mov     ax, #_msg2  ; input error
+00049                       00000074>           _outmsg:
+00050 0074           E8         000E                    call    _printmsg
+00051 0077           90                                 nop
+00052                       00000078>           _endp:
+00053 0078           B8                   4C00          mov     ax, #0x4c00
+00054 007B           CD                     21          int     0x21     
+00055                                           
+00056                       0000007D>           _getcursorposition:
+00057 007D           B4                     03          mov     ah, #0x03
+00058 007F           BB                   0000          mov     bx, #0
+00059 0082           CD                     10          int     0x10
+00060 0084           C3                                 ret
+00061                                           
+00062                       00000085>           _printmsg:
+00063 0085           05                   0100          add     ax, #0x100
+00064 0088           89C5                               mov     bp, ax
+00065 008A           BB                   000F          mov     bx, #0x000f
+00066 008D           B8                   1301          mov     ax, #0x1301
+00067 0090           CD                     10          int     0x10
+00068 0092           C3                                 ret
+00069                                           
+00070                       00000093>           _getcurrenttime:
+00071 0093           B4                     2C          mov     ah, #0x2c       ; get time
+00072 0095           CD                     21          int     0x21
+00073 0097           C3                                 ret
+00074                                           
+00075                       00000098>           _getrandomnumber:
+00076 0098           E8         FFF8                    call    _getcurrenttime
+00077 009B           88D0                               mov     al, dl          ; dl almost random 0~99
+00078 009D           B4                     00          mov     ah, #0
+00079 009F           B3                     0B          mov     bl, #11
+00080 00A1           FECB                               dec     bl
+00081 00A3           F6F3                               div     bl              ; random / 10 , al 0 ~ 9
+00082 00A5           C3                                 ret
+00083                                           
+00084                       000000A6>           _getkey:
+00085 00A6           B4                     10          mov     ah, #0x10
+00086 00A8           CD                     16          int     0x16
+00087 00AA           C3                                 ret
+00088                                           
+00089                       000000AB>           _outkey:
+00090 00AB           B9                   0001          mov     cx, #1
+00091 00AE           B7                     00          mov     bh, #0
+00092 00B0           B4                     05          mov     ah, #5
+00093 00B2           80C4                   05          add     ah, #5      ; user press a key
+00094 00B5           CD                     10          int     0x10        ; al = key pressed
+00095 00B7           C3                                 ret
+00096 0000                                      .data
+00097 0000                                      .bss
+
+Symbols:
+                     _endp  0 0078 R                       _error  0 006E R   
+           _getcurrenttime  0 0093 R           _getcursorposition  0 007D R   
+                   _getkey  0 00A6 R             _getrandomnumber  0 0098 R   
+                _guessfail  0 0066 R                        _main  0 0000 R E 
+                     _msg1  0 0002 R                     _msg1len  0 0016 A   
+                     _msg2  0 0018 R                     _msg2len  0 000B A   
+                     _msg3  0 0023 R                     _msg3len  0 0004 A   
+                     _msg4  0 0027 R                     _msg4len  0 0007 A   
+                   _outkey  0 00AB R                      _outmsg  0 0074 R   
+                 _printmsg  0 0085 R                       _readA  0 0032 R   
+                    _start  0 002E R                      inputOK  0 0059 R   
+
+00000 errors
+00000 warnings
